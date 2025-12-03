@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Simples</title>
+    <!-- Incluindo Tailwind CSS para uma estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilização personalizada para centralizar e dar um visual limpo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container Principal com Formulario de Cadastro -->
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md m-4 border-t-4 border-blue-500">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-6 text-center">Cadastro de Usuário</h1>
+        
+        <form id="cadastroForm">
+            <!-- Campo Nome -->
+            <div class="mb-4">
+                <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                <input type="text" id="nome" name="nome" required 
+                       placeholder="Seu nome"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+            </div>
+
+            <!-- Campo Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="seu.email@exemplo.com"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="mb-6">
+                <label for="senha" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="senha" name="senha" required 
+                       placeholder="Mínimo 6 caracteres"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+            </div>
+
+            <!-- Botão de Envio -->
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-md">
+                Cadastrar
+            </button>
+            
+            <!-- Área para exibir mensagens de status/erro -->
+            <div id="statusMessage" class="mt-4 p-3 rounded-lg text-center font-medium hidden"></div>
+
+        </form>
+        
+        <!-- Área para exibir os dados cadastrados (depois de sucesso) -->
+        <div id="dadosOutput" class="mt-6 border-t pt-4 hidden">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">Último Cadastro Enviado:</h2>
+            <pre id="dadosTexto" class="bg-gray-100 p-3 rounded-lg text-sm whitespace-pre-wrap"></pre>
+        </div>
+        
+    </div>
+
+    <script>
+        // Função utilitária para exibir mensagens de status
+        function showStatusMessage(message, isError = false) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            
+            if (isError) {
+                statusDiv.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                statusDiv.classList.add('bg-green-100', 'text-green-800');
+            }
+        }
+
+        // Função principal de tratamento do formulário
+        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+            // Previne o comportamento padrão de envio do formulário (recarregar a página)
+            event.preventDefault();
+
+            // 1. Coletar os dados
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+            
+            // Simulação de validação simples: Apenas verifica se a senha tem 6 caracteres
+            if (senha.length < 6) {
+                showStatusMessage('Erro: A senha deve ter pelo menos 6 caracteres.', true);
+                return;
+            }
+
+            // 2. Simular o envio (Aqui você faria um fetch/axios para um servidor real)
+            const userData = {
+                nome: nome,
+                email: email,
+                senhaHash: '*'.repeat(senha.length) // Não exibir a senha real!
+            };
+
+            // 3. Exibir sucesso e dados
+            showStatusMessage('Cadastro realizado com sucesso! (Dados apenas exibidos no console/tela)', false);
+            
+            // Exibe os dados no console
+            console.log('Dados do Usuário:', userData);
+
+            // Exibe os dados na tela
+            document.getElementById('dadosTexto').textContent = JSON.stringify(userData, null, 2);
+            document.getElementById('dadosOutput').classList.remove('hidden');
+
+            // Opcional: Limpar o formulário
+            this.reset();
+        });
+    </script>
+
+</body>
+</html>
